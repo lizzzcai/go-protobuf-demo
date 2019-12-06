@@ -32,7 +32,10 @@ func Echo(writer http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		log.Fatalf("Unable to marshal response : %v", err)
 	}
-	writer.Write(response)
+	_, err = writer.Write(response)
+	if err != nil {
+		log.Panic(err)
+	}
 }
 
 func main() {
