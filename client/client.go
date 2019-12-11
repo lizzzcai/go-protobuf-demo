@@ -10,16 +10,19 @@ import (
 	"github.com/lizzzcai/go-protobuf-demo/proto/echo"
 )
 
+const url = "http://127.0.0.1:8000/echo"
+
 func makeRequest(request *echo.EchoRequest) *echo.EchoResponse {
 	req, err := proto.Marshal(request)
 	if err != nil {
 		log.Fatalf("Unable to marshal request : %v", err)
 	}
 
-	resp, err := http.Post("http://0.0.0.0:8000/echo", "application/x-binary", bytes.NewReader(req))
+	resp, err := http.Post(url, "application/x-protobuf", bytes.NewReader(req))
 	if err != nil {
 		log.Fatalf("Unable to read from the server : %v", err)
 	}
+	defer resp.Body.Close()
 
 	respBytes, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
